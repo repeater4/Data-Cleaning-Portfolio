@@ -58,7 +58,7 @@ DROP COLUMN transaction_id, purchase_size, customer_id
 
 --Using CASE WHEN to map values in a column to other values
 
-SELECT pruduct_code, purchase_price
+SELECT product_code, purchase_price
 CASE
     WHEN purchase_price > 20 THEN "High Ticket Sale"
     WHEN purchase_price < 15 THEN "Low margine Sale"
