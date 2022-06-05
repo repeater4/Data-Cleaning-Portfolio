@@ -1,4 +1,4 @@
-npm install sql-highlight
+
 
 --Changing data type from a string to a float so that it can be formatted corectly
 
