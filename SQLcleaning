@@ -1,0 +1,89 @@
+--Changing data type from a string to a float so that it can be formatted corectly
+
+SELECT  
+    CAST(purchase_price AS FLOAT64)
+FROM
+   `my-project-pract-349901.customer_data.customer_purchase` 
+ORDER BY
+    CAST(purchase_price AS FLOAT64) DESC
+    
+-------------------------------------------------------------------------------------------------------------------------    
+
+--Looking at the purchases that occurred during their sales promotion in December
+ --Using the cast function to show the date without the time
+
+SELECT    
+    CAST(date AS date) AS date_only,
+    purchase_price
+FROM 
+   `my-project-pract-349901.customer_data.customer_purchase` 
+WHERE
+  date BETWEEN '2020-12-01' AND '2020-12-31'
+  
+-------------------------------------------------------------------------------------------------------------------------    
+
+--To separate products by color using the CONCAT function
+
+SELECT 
+    CONCAT(product_code, product_color) AS new_product_code
+FROM
+     `my-project-pract-349901.customer_data.customer_purchase` 
+WHERE  
+    product = 'couch'
+    
+ -------------------------------------------------------------------------------------------------------------------------     
+
+--Using COALESCE to return non-null value
+
+SELECT
+   COALESCE(product, product_code) AS product_info
+FROM 
+   `my-project-pract-349901.customer_data.customer_purchase` 
+   
+-------------------------------------------------------------------------------------------------------------------------     
+
+--Deleting unused columns
+
+SELECT * 
+FROM 
+    `my-project-pract-349901.customer_data.customer_purchase`
+
+ALTER TABLE   
+    `my-project-pract-349901.customer_data.customer_purchase`
+DROP COLUMN transaction_id, purchase_size, customer_id
+
+-------------------------------------------------------------------------------------------------------------------------  
+
+--Using CASE WHEN to map values in a column to other values
+
+SELECT pruduct_code, purchase_price
+CASE
+    WHEN purchase_price > 20 THEN "High Ticket Sale"
+    WHEN purchase_price < 15 THEN "Low margine Sale"
+    ELSE "No Profit SALE"
+END
+FROM `my-project-pract-349901.customer_data.customer_purchase`  
+
+-- Deleting duplicate rows from the table
+
+WITH cte AS (
+    SELECT 
+        transaction_id, 
+        product_color, 
+        product, 
+        product_code, 
+        ROW_NUMBER() OVER (
+            PARTITION BY 
+                product_color, 
+                product, 
+                emaiproduct_code
+            ORDER BY 
+                product_color, 
+                product, 
+                product_code
+        ) row_num
+     FROM 
+        `my-project-pract-349901.customer_data.customer_purchase` 
+)
+DELETE FROM cte
+WHERE row_num > 1
